@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="/css/expense.css" />
+  </head>
+
+  <body>
+    <div class="header">
+      <h1>Expense Tracker</h1>
+      <button><a href="/logout">Logout</a></button>
+    </div>
+
+    <form action="/" method="POST">
+      <input type="date" name="date" id="date" max="" required />
+      <select name="category" id="category">
+        <option value="food">Food</option>
+        <option value="fees">Fees</option>
+        <option value="travel">Travel</option>
+        <option value="other">Other</option>
+        <option value="recharge">Recharge</option>
+      </select>
+      <input type="number" min="1" name="amount" required />
+      <input type="submit" value="Add Expense" />
+    </form>
+
+    <div class="amountCC">
+      <h2>Total Expense of current month : <%= totalAmount %></h2>
+
+      <% let totalFilteredAmount = filteredExpenses .filter(expense =>
+      expense.username === user) .reduce((sum, expense) => sum + expense.amount,
+      0); %>
+      <h2>Total Expense of Filtered Data: <%= totalFilteredAmount %></h2>
+    </div>
+
+    <div class="filterC">
+      <form action="/" method="GET">
+        <label for="filterCategory">Filter by Category:</label>
+        <select name="category" id="filterCategory">
+          <option value="">All</option>
+          <option value="food">Food</option>
+          <option value="fees">Fees</option>
+          <option value="travel">Travel</option>
+          <option value="other">Other</option>
+          <option value="recharge">Recharge</option>
+        </select>
+
+        <label for="filterDate">Filter by Date:</label>
+        <input type="month" name="filterDate" id="filterDate" />
+
+        <input type="submit" value="Apply Filters" />
+      </form>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Category</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (Expense of filteredExpenses.reverse()) { %> <% if
+        (Expense.username === user) { %>
+        <tr>
+          <% const options={ month: 'short' , day: 'numeric' , year: 'numeric'
+          }; %> <% const formattedDate=new Intl.DateTimeFormat('en-US',
+          options).format(Expense.date); %>
+          <td><%= formattedDate %></td>
+          <td><%= Expense.amount %></td>
+          <td><%= Expense.category %></td>
+          <td>
+            <form action="/<%= Expense._id %>?_method=DELETE" method="POST">
+              <button>Delete</button>
+            </form>
+          </td>
+        </tr>
+        <% } %> <% } %>
+      </tbody>
+    </table>
+
+    <script>
+      const dateInput = document.getElementById("date");
+      const currentDate = new Date().toISOString().split("T")[0];
+      dateInput.max = currentDate;
+    </script>
+  </body>
+</html>
