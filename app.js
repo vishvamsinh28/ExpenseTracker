@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -30,8 +31,9 @@ app.use("/", expenseRoutes);
 app.use("/", userRoutes);
 
 mongoose.connect(process.env.MONGOURL, {
-  useNewUrlParser: "true",
+  useNewUrlParser: true,
 });
+
 mongoose.connection.on("error", (err) => {
   console.log("err", err);
 });
