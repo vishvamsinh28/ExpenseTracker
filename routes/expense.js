@@ -4,7 +4,7 @@ const auth = require("../auth");
 const Expense = require("../models/expense");
 
 router.get("/", auth, async (req, res) => {
-  const Expenses = await Expense.find({});
+  const Expenses = await Expense.find({ username: req.session.username });
   const categoryFilter = req.query.category;
   const dateFilter = req.query.filterDate;
 

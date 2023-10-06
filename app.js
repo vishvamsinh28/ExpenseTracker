@@ -7,6 +7,7 @@ const session = require("express-session");
 const auth = require("./auth");
 const userRoutes = require("./routes/user");
 const expenseRoutes = require("./routes/expense");
+const methodOverride = require("method-override");
 const path = require("path");
 
 app.use(
@@ -25,6 +26,7 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.set("view engine", "ejs");
+app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", expenseRoutes);
